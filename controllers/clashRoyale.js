@@ -1,4 +1,4 @@
-const { getClanDataByTagName } = require("../services/clashRoyale");
+const { getClanDataByTagName, getClanRiverRaceLog } = require("../services/clashRoyale");
 
 const handleGetRiverRaceData = async ({
     params: {
@@ -6,10 +6,13 @@ const handleGetRiverRaceData = async ({
     },
 }, res) => {
     try {
-        const response = await getClanDataByTagName(clanTag);
-        res.json({ test: "" });
+        const [clanTagData, riverRaceLog] = await Promise.all([
+            getClanDataByTagName(clanTag),
+            getClanRiverRaceLog(clanTag),
+        ]);
+
+        res.json({ ...clanTagData, ...riverRaceLog });
     } catch (error) {
-        console.log(error);
         res.status(500).json("Could not fetch river race data.");
     }
 };
