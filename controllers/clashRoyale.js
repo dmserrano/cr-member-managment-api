@@ -4,7 +4,7 @@ const handleGetRiverRaceData = async ({
     params: {
         clanTag = "",
     },
-}, res) => {
+}, res, next) => {
     try {
         const [clanTagData, riverRaceLog] = await Promise.all([
             getClanDataByTagName(clanTag),
@@ -13,7 +13,7 @@ const handleGetRiverRaceData = async ({
 
         res.json({ ...clanTagData, ...riverRaceLog });
     } catch (error) {
-        res.status(500).json("Could not fetch river race data.");
+        next(error);
     }
 };
 
